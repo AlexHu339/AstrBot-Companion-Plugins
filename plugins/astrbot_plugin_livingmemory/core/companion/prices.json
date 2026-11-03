@@ -1,0 +1,40 @@
+{
+  "verified_on": "2026-10-30",
+  "source": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/?helper=penn&method=individual",
+  "unit": "CNY per 1,000,000 tokens",
+  "note": "Local estimate using weekday peak/off-peak time. Chinese public holidays require invoice reconciliation. Unknown models are never priced as zero.",
+  "models": {
+    "deepseek-flash": {
+      "verified": true,
+      "currency": "CNY",
+      "peak": {"input": 2, "cached": 0.04, "output": 8},
+      "off_peak": {"input": 1, "cached": 0.02, "output": 4}
+    },
+    "mimo-v2.6-flash": {
+      "verified": true,
+      "currency": "CNY",
+      "input": 1,
+      "cached": 0.02,
+      "output": 2,
+      "verified_on": "2026-10-30",
+      "source": "https://mimo.mi.com/models/zh-CN/mimo-v2.6-flash",
+      "basis": "官方国内按量计费实时 API 标准价；优惠、赠金和订阅以平台账单为准"
+    },
+    "mimo-v2.6-pro": {
+      "verified": true,
+      "currency": "CNY",
+      "input": 3,
+      "cached": 0.025,
+      "output": 6,
+      "verified_on": "2026-10-30",
+      "source": "https://mimo.mi.com/docs/zh-CN/quick-start/usage-guide/text-generation/batch-api",
+      "basis": "官方国内按量计费实时 API 标准价（非 Batch 半价）；优惠、赠金和订阅以平台账单为准"
+    },
+    "deepseek-v4-pro": {
+      "verified": true,
+      "currency": "CNY",
+      "peak": {"input": 9, "cached": 0.3, "output": 27},
+      "off_peak": {"input": 4.5, "cached": 0.15, "output": 13.5}
+    }
+  }
+}

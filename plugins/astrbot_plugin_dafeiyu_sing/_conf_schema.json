@@ -1,0 +1,67 @@
+{
+  "song_seconds": {
+    "description": "期望每段唱多久（秒）",
+    "type": "int",
+    "default": 25,
+    "hint": "默认约25秒，支持2至120秒。这是给云端的时长提示，不是精确剪辑；实际生成时长和计费时长以火山返回为准。云端不限定三首歌，支持更多歌名、主题和原创小调。"
+  },
+  "playful_feedback": {
+    "description": "评价唱歌时按当前人格自然接梗",
+    "type": "bool",
+    "default": true,
+    "hint": "你吐槽跑调、夸好听时，把最近实际唱歌结果提供给正常聊天模型，让小鱼自然撒娇、嘴硬、认怂或反邀你唱。没有固定台词，不额外调用模型；目前不检测音准，不会假装自行听出了跑调，也不会因吐槽自动重唱。"
+  },
+  "reuse_clonetts": {
+    "description": "复用现有克隆语音插件的 API Key",
+    "type": "bool",
+    "default": true,
+    "hint": "每次唱歌时读取现有克隆语音设置，不复制保存密钥。需要在同一火山项目中另行开通豆包音频生成模型1.0；声音复刻2.0的字符额度不能抵扣唱歌时长。"
+  },
+  "reuse_clonetts_voice": {
+    "description": "用克隆语音里的音色作为唱歌参考",
+    "type": "bool",
+    "default": true,
+    "hint": "把现有音色ID交给Seed Audio作为参考，尽量贴近小鱼的说话声音。唱歌表现和声线仍可能变化；试用音色是否可跨服务使用，需要实际服务验证。关闭后按本次唱法生成声音。"
+  },
+  "doubao_api_key": {
+    "description": "唱歌专用火山 API Key（通常留空）",
+    "type": "string",
+    "default": "",
+    "hint": "留空并开启复用时，直接使用克隆语音插件中的Key；只在需要用其他项目的Key时填写。新版控制台使用API Key，不用填写下面的旧版AppID和Access Token。"
+  },
+  "allow_autonomous_singing": {
+    "description": "允许小鱼在没有点歌时自行唱歌",
+    "type": "bool",
+    "default": false,
+    "hint": "默认关闭，只在你明确说唱歌、哼歌时调用。开启后模型也可以按人格和语境自行唱歌；每次生成都会计入火山的音频生成用量。"
+  },
+  "backend": {
+    "description": "用哪个模型唱",
+    "type": "string",
+    "options": ["doubao", "soulx"],
+    "hint": "doubao：豆包音频生成1.0云端，支持更多歌名、主题、原创或即兴小调，不限三首，也不强行切成儿歌歌词。歌名作为主题或风格参考，不保证原曲旋律；按实际生成时长计费。soulx：本地按谱唱歌，目前仅有三首曲谱，需要另行部署服务和模型。",
+    "default": "doubao"
+  },
+  "doubao_app_id": {
+    "description": "旧版豆包 APP ID（新版API Key用户留空）",
+    "type": "string",
+    "default": ""
+  },
+  "doubao_access_token": {
+    "description": "旧版 Access Token（新版API Key用户留空）",
+    "type": "string",
+    "default": ""
+  },
+  "doubao_tries": {
+    "description": "豆包最多抽几次",
+    "type": "int",
+    "hint": "唱出来的字和歌词对不上八成才再抽一次；每抽一次都按时长收钱",
+    "default": 1
+  },
+  "server_url": {
+    "description": "唱歌服务地址（只有 soulx 用）",
+    "type": "string",
+    "hint": "sing_server.py 默认监听 http://127.0.0.1:18620；唱歌服务在另一台电脑上就填那台的局域网地址",
+    "default": "http://127.0.0.1:18620"
+  }
+}

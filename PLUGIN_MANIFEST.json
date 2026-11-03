@@ -1,0 +1,96 @@
+{
+  "snapshot_date": "2026-11-03",
+  "target_astrbot": "4.29.3",
+  "plugins": [
+    {
+      "directory": "astrbot_plugin_livingmemory",
+      "name": "LivingMemory 小鱼陪伴版",
+      "version": "2.8.2+companion.14",
+      "license": "AGPL-3.0",
+      "author": "lxfight; companion customization",
+      "upstream": "https://github.com/lxfight-s-Astrbot-Plugins/astrbot_plugin_livingmemory"
+    },
+    {
+      "directory": "astrbot_plugin_qq_features",
+      "name": "qq功能拓展",
+      "version": "2.3.2",
+      "license": "AGPL-3.0",
+      "author": "local companion customization",
+      "upstream": ""
+    },
+    {
+      "directory": "astrbot_plugin_proactive_chat",
+      "name": "主动消息",
+      "version": "v1.2.6+companion.1",
+      "license": "AGPL-3.0",
+      "author": "DBJD-CR",
+      "upstream": "https://github.com/Pancakes-Labs/astrbot_plugin_proactive_chat"
+    },
+    {
+      "directory": "meme_manager",
+      "name": "表情包管理器",
+      "version": "5.2.9+companion.2",
+      "license": "MIT",
+      "author": "anka",
+      "upstream": "https://github.com/anka-afk/astrbot_plugin_meme_manager"
+    },
+    {
+      "directory": "astrbot_plugin_clonetts",
+      "name": "克隆语音",
+      "version": "v3.0.1+companion.1",
+      "license": "AGPL-3.0",
+      "author": "Radiant303",
+      "upstream": "https://github.com/Radiant303/astrbot_plugin_clonetts"
+    },
+    {
+      "directory": "astrbot_plugin_dafeiyu_sing",
+      "name": "小鱼唱歌",
+      "version": "v0.2.1+companion.4",
+      "license": "MIT",
+      "author": "zexuan604 / zexuanw958-svg",
+      "upstream": "https://github.com/zexuanw958-svg/dafeiyu-config-pack"
+    }
+  ],
+  "packaging_changes": [
+    {
+      "plugin": "astrbot_plugin_qq_features",
+      "path": "_conf_schema.json",
+      "change": "portable-empty-data-root-default"
+    },
+    {
+      "plugin": "astrbot_plugin_dafeiyu_sing",
+      "path": "LICENSE",
+      "change": "retain-MIT-license-from-upstream-configuration-pack"
+    },
+    {
+      "plugin": "collection",
+      "path": "README.md; docs/; examples/; scripts/",
+      "change": "add-public-installation-and-reproducible-packaging-documents"
+    },
+    {
+      "plugin": "astrbot_plugin_proactive_chat",
+      "path": "admin/fonts/OFL.txt",
+      "change": "retain-Outfit-font-OFL-license-from-google-fonts"
+    },
+    {
+      "plugin": "meme_manager",
+      "path": "pages/app/shared/FONT_AWESOME_LICENSE.txt",
+      "change": "retain-Font-Awesome-6.4.0-asset-license"
+    },
+    {
+      "plugin": "astrbot_plugin_dafeiyu_sing",
+      "path": "README.md; README_COMPANION.md",
+      "change": "describe-current-customized-cloud-backend-and-preserve-upstream-README"
+    },
+    {
+      "plugin": "astrbot_plugin_livingmemory",
+      "path": "README_COMPANION.md",
+      "change": "replace-machine-specific-notes-with-public-setup-guide"
+    },
+    {
+      "plugin": "collection",
+      "path": ".gitattributes; plugins/astrbot_plugin_proactive_chat/.gitattributes",
+      "change": "preserve-exact-source-bytes-in-Git-and-release-archives"
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "general": {
+    "enabled": true,
+    "owner_scope": "",
+    "data_root": "",
+    "workspace_version": 2
+  },
+  "features": {
+    "poke_react": true,
+    "poke_back": true,
+    "poke_active": true,
+    "quote": true,
+    "recall": true,
+    "nickname": true,
+    "avatar": true,
+    "signature": true,
+    "status": true,
+    "qzone_read": true,
+    "qzone_publish": true,
+    "qzone_comment": true,
+    "social_delayed": true,
+    "social_share": true,
+    "mood_signature": true,
+    "qzone_draft": true,
+    "social_memory": true,
+    "social_browse": true,
+    "qzone_browse_friends": true,
+    "qzone_comment_friends": true
+  },
+  "limits": {
+    "poke_cooldown_seconds": 30,
+    "poke_response_probability": 0.7,
+    "poke_response_cooldown_seconds": 45,
+    "recall_delay_seconds": 5,
+    "quote_history_minutes": 10,
+    "recall_window_seconds": 120,
+    "context_chars": 900,
+    "signature_daily_limit": 2,
+    "signature_cooldown_hours": 6
+  },
+  "social": {
+    "reads_per_day": 2,
+    "posts_per_window": 2,
+    "comments_per_window": 2,
+    "window_days": 5,
+    "read_batch_size": 3,
+    "decisions_per_day": 6,
+    "unanswered_min_minutes": 45,
+    "unanswered_max_minutes": 240,
+    "closure_min_minutes": 60,
+    "closure_max_minutes": 360,
+    "delayed_probability": 0.5,
+    "share_probability": 0.65,
+    "vision_enabled": true,
+    "vision_provider_id": "",
+    "vision_images_per_read": 1,
+    "observation_retention_days": 30,
+    "topic_ttl_hours": 48,
+    "style_guidance": "沿用当前人格、关系称呼和口癖，允许傲娇、嘴硬心软、可爱吐槽和适量玩梗。结合当下语境，避免复读固定例句；可以用emoji或颜文字。认真、难过时温柔些；不把没回消息都理解为不爱或出轨，玩笑不记成事实。",
+    "mode": "autonomous"
+  },
+  "profile_auto": {
+    "enabled": true,
+    "nickname": true,
+    "avatar": true,
+    "signature": true,
+    "status": true,
+    "probability": 0.35,
+    "daily_limit": 2,
+    "cooldown_hours": 6,
+    "max_changes_per_opportunity": 2,
+    "randomize_change_count": true
+  },
+  "space": {
+    "owner": true,
+    "friends": true,
+    "public": true,
+    "shared_comment": true
+  },
+  "conversation": {
+    "enabled": true,
+    "probability": 0.6,
+    "turn_gap": 2
+  },
+  "meme_reaction": {
+    "enabled": true,
+    "probability": 0.45,
+    "cooldown_minutes": 10,
+    "daily_limit": 5
+  }
+}

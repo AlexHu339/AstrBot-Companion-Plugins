@@ -1,0 +1,488 @@
+{
+  "general": {
+    "description": "总开关与主人身份",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用 qq功能拓展",
+        "type": "bool",
+        "default": true,
+        "hint": "关闭后停止执行所有互动动作，保留已有草稿和动作记录。"
+      },
+      "owner_scope": {
+        "description": "主人QQ私聊会话",
+        "type": "string",
+        "default": "",
+        "hint": "绑定平台实例ID:FriendMessage:主人QQ号；留空只在全局白名单恰有一个私聊时自动识别。群聊和其他人不可用。"
+      },
+      "data_root": {
+        "description": "动作与草稿存放目录",
+        "type": "string",
+        "default": "",
+        "hint": "本机使用 D:\\AstrbotData\\qq_features 保存动作记录和草稿。不会保存模型密钥或QQ Cookie。修改目录需要重新加载本插件。"
+      },
+      "workspace_version": {
+        "description": "内部配置格式版本",
+        "type": "int",
+        "default": 2,
+        "invisible": true
+      }
+    }
+  },
+  "features": {
+    "description": "能力开关：能做什么；执行方式统一由空间行动方式决定",
+    "type": "object",
+    "items": {
+      "poke_react": {
+        "description": "被戳后按人格回应",
+        "hint": "你戳机器人后，它会结合当前人格、近期对话、记忆和心情，简短回应。不是每戳一下都机械回复；受回应概率和冷却时间限制。命中回应会产生一次正常聊天模型费用。",
+        "type": "bool",
+        "default": true
+      },
+      "poke_back": {
+        "description": "被戳后可以回戳",
+        "hint": "机器人被你戳后，可以按语境回戳一次，也可以只说话。关闭后，被戳事件仍能被理解，但不会因该事件回戳。戳动作本身不消耗模型 token。",
+        "type": "bool",
+        "default": true
+      },
+      "poke_active": {
+        "description": "聊天和主动消息中主动戳你",
+        "hint": "在普通聊天或现有主动消息中，机器人可以偶尔戳你一下。不会另外启动定时聊天任务。与回戳共用冷却，默认每轮最多一次；关闭后仍可单独允许被戳回戳。",
+        "type": "bool",
+        "default": true
+      },
+      "quote": {
+        "description": "引用你前面的话",
+        "hint": "机器人可以引用当前私聊在“引用历史时长”内收到的真实 QQ 消息，默认最近10分钟。引用时长单独设置，不会扩大撤回范围；不会引用别人的私聊。沿用 AstrBot 分段发送，引用附在本轮第一条实际消息上。",
+        "type": "bool",
+        "default": true
+      },
+      "recall": {
+        "description": "撤回自己刚发的消息",
+        "hint": "机器人可以把本轮回复标记为几秒后尝试撤回，也可以撤回本私聊仍在“允许撤回时限”内的真实机器人消息。默认只允许发送后120秒内的消息，自动撤回另外默认等5秒；引用时长不会扩大撤回范围。不会撤回用户消息，不猜消息编号；接口成功后才记录撤回成功。",
+        "type": "bool",
+        "default": true
+      },
+      "nickname": {
+        "description": "按你的要求改 QQ 昵称",
+        "hint": "你在主人私聊中明确要求修改时，机器人可修改整个 QQ 账号的昵称。不会随切换人格自动修改；账号资料对所有好友共同可见。接口成功后才报告成功。",
+        "type": "bool",
+        "default": true
+      },
+      "avatar": {
+        "description": "按你的要求改 QQ 头像",
+        "hint": "你明确要求换头像并发送或引用一张图片后，机器人可把它设为 QQ 头像。也可在本页选择本地图片。只使用本次图片，不允许模型任意读取电脑文件或指定外部下载地址。",
+        "type": "bool",
+        "default": true
+      },
+      "signature": {
+        "description": "按你的要求改个性签名",
+        "hint": "你说“把签名改成……”时，机器人修改 QQ 个性签名。主动心情签名另有独立开关和次数限制。两个入口共用同一个修改器，避免互相抢写。",
+        "type": "bool",
+        "default": true
+      },
+      "status": {
+        "description": "按你的要求改在线状态",
+        "hint": "你明确要求时，可切换在线、离开、隐身、忙碌、请勿打扰等 QQ 状态。只改变 QQ 展示状态，不停止 AstrBot，也不更改主动消息的免打扰设置。",
+        "type": "bool",
+        "default": true
+      },
+      "qzone_read": {
+        "description": "主动浏览空间",
+        "hint": "只控制自动逛空间；关闭不影响读取主人发来的空间动态。浏览次数设0也会停止自动浏览。",
+        "type": "bool",
+        "default": true
+      },
+      "qzone_publish": {
+        "description": "自主发表说说",
+        "hint": "根据当前人格、真实上下文和见闻感触自主发表；不逐条审核，受周期、概率与去重约束。",
+        "type": "bool",
+        "default": true
+      },
+      "qzone_comment": {
+        "description": "主动浏览后允许评论",
+        "hint": "主动浏览的评论子权限；关闭只看。主人分享动态的评论权限在空间组单独设置。",
+        "type": "bool",
+        "default": true
+      },
+      "social_delayed": {
+        "description": "聊天结束或没回消息时偶尔发动态",
+        "hint": "在主动消息成功送达但你尚未回复，或一段聊天自然结束后，安排一次随机延迟的行动候选。到点会重新检查你是否已回复、是否免打扰、额度是否足够，再决定发不发；不机械催你，也不把玩笑里的猜测记成事实。",
+        "type": "bool",
+        "default": true
+      },
+      "social_share": {
+        "description": "把见闻带回聊天",
+        "hint": "小鱼可以把读到的有趣动态作为可选话题、分享原链接，或在适合时于自己的说说中提到你。私聊分享共用现有主动消息管线、上下文和表情包管理器，不另开一套连续催聊器；分享过或过期的话题会退出队列。",
+        "type": "bool",
+        "default": true
+      },
+      "mood_signature": {
+        "description": "兼容字段（自动维护）",
+        "type": "bool",
+        "default": true,
+        "invisible": true
+      },
+      "qzone_draft": {
+        "description": "兼容字段（自动维护）",
+        "type": "bool",
+        "default": true,
+        "invisible": true
+      },
+      "social_memory": {
+        "description": "兼容字段（自动维护）",
+        "type": "bool",
+        "default": true,
+        "invisible": true
+      },
+      "social_browse": {
+        "description": "兼容字段（自动维护）",
+        "type": "bool",
+        "default": true,
+        "invisible": true
+      },
+      "qzone_browse_friends": {
+        "description": "兼容字段（自动维护）",
+        "type": "bool",
+        "default": true,
+        "invisible": true
+      },
+      "qzone_comment_friends": {
+        "description": "兼容字段（自动维护）",
+        "type": "bool",
+        "default": true,
+        "invisible": true
+      }
+    }
+  },
+  "limits": {
+    "description": "频率与限制",
+    "type": "object",
+    "items": {
+      "poke_cooldown_seconds": {
+        "description": "主动戳与回戳冷却（秒）",
+        "type": "int",
+        "default": 30,
+        "hint": "页面显示完整说明；此设置不会修改AstrBot原生分段参数。"
+      },
+      "poke_response_probability": {
+        "description": "被戳后说话的概率（0至1）",
+        "type": "float",
+        "default": 0.7,
+        "hint": "页面显示完整说明；此设置不会修改AstrBot原生分段参数。"
+      },
+      "poke_response_cooldown_seconds": {
+        "description": "被戳后说话的最短间隔（秒）",
+        "type": "int",
+        "default": 45,
+        "hint": "页面显示完整说明；此设置不会修改AstrBot原生分段参数。"
+      },
+      "recall_delay_seconds": {
+        "description": "标记自动撤回后等待（秒）",
+        "type": "int",
+        "default": 5,
+        "hint": "仅对本轮被标记自动撤回的消息生效。默认发完后等5秒尝试撤回，必须短于允许撤回时限；不影响引用。"
+      },
+      "quote_history_minutes": {
+        "description": "引用历史时长（分钟）",
+        "type": "int",
+        "default": 10,
+        "hint": "只决定可引用多久以前的用户消息。与撤回时限和自动撤回等待独立，不删除长期记忆。"
+      },
+      "recall_window_seconds": {
+        "description": "消息发出后允许撤回的时限（秒）",
+        "type": "int",
+        "default": 120,
+        "hint": "仅允许撤回发送后仍在此时限内的机器人真实消息；不是自动等待时间。默认120秒，可设5～300秒，平台接受与否以实际回执为准。"
+      },
+      "context_chars": {
+        "description": "每轮动作临时背景最大字数",
+        "type": "int",
+        "default": 900,
+        "hint": "页面显示完整说明；此设置不会修改AstrBot原生分段参数。"
+      },
+      "signature_daily_limit": {
+        "description": "兼容字段（自动维护）",
+        "type": "int",
+        "default": 2,
+        "invisible": true
+      },
+      "signature_cooldown_hours": {
+        "description": "兼容字段（自动维护）",
+        "type": "int",
+        "default": 6,
+        "invisible": true
+      }
+    }
+  },
+  "social": {
+    "description": "空间自主程度、频率与表达偏好",
+    "type": "object",
+    "items": {
+      "reads_per_day": {
+        "description": "每天最多自动浏览次数",
+        "hint": "一天最多自动出去逛几次。每次看几条由“每次新动态条数”决定；例如每天5次、每次3条，理论上最多看15条，重复或不可访问的内容会更少。改动保存后，后台在下一次检查时更新剩余计划，不补发错过的次数。",
+        "type": "int",
+        "default": 2
+      },
+      "posts_per_window": {
+        "description": "每周期最多自主说说次数",
+        "hint": "只限制小鱼自主发说说的次数，与自主评论分别计数。是上限，不会为了凑数硬发。你在审核页明确批准的手动草稿不占自主额度。",
+        "type": "int",
+        "default": 2
+      },
+      "comments_per_window": {
+        "description": "每周期最多自主评论次数",
+        "hint": "好友动态和空友爱看共用这一个自主评论额度；不是每个好友各有一份。同一动态近期不会反复评论。",
+        "type": "int",
+        "default": 2
+      },
+      "window_days": {
+        "description": "说说和评论共用的滚动周期（天）",
+        "hint": "随时往前数多少天。例如5天、说说3次：任意时刻往前5天最多3次；最早一条超过5天后才腾出名额，不是每隔5天整批清零。说说与评论各自计数。",
+        "type": "int",
+        "default": 5
+      },
+      "read_batch_size": {
+        "description": "每次最多读取新动态条数",
+        "hint": "一次浏览最多挑几条新动态来理解。与每天浏览次数不同；只看文字不一定需要识图，读过的会去重。",
+        "type": "int",
+        "default": 3
+      },
+      "decisions_per_day": {
+        "description": "每天最多自主决策调用次数",
+        "hint": "每天最多额外调用几次模型考虑空间行动；最后选择不发也算一次。识图另列为“空间看图”统计。0关闭这类额外后台生成，不限制正常聊天。",
+        "type": "int",
+        "default": 6
+      },
+      "unanswered_min_minutes": {
+        "description": "未等到回复后随机等待最少（分钟）",
+        "hint": "一条主动私聊实际送出后，你尚未回复，至少等这么久才考虑发说说。只影响空间候选，不会触发另一条私聊；你回复后旧候选取消。",
+        "type": "int",
+        "default": 45
+      },
+      "unanswered_max_minutes": {
+        "description": "未等到回复后随机等待最多（分钟）",
+        "hint": "与最少等待一起构成随机范围；例如45～240分钟，从中随机选一个时刻。到时间还会检查概率、免打扰、次数上限和是否值得发。",
+        "type": "int",
+        "default": 240
+      },
+      "closure_min_minutes": {
+        "description": "话题结束后随机等待最少（分钟）",
+        "hint": "你明确说拜拜、先去忙等结束话题后，至少等这么久才考虑发说说。不是私人聊天的发送间隔；私聊时间始终听主动消息插件的。",
+        "type": "int",
+        "default": 60
+      },
+      "closure_max_minutes": {
+        "description": "话题结束后随机等待最多（分钟）",
+        "hint": "与聊天结束后的最少等待配成随机范围，例如60～360分钟。只是一次考虑机会，不保证到时就发，更不会重开私聊。",
+        "type": "int",
+        "default": 360
+      },
+      "delayed_probability": {
+        "description": "延迟候选进入决策概率",
+        "hint": "等待到时后，按这个概率才调用模型考虑发说说。0.5约一半候选进入考虑；进入后仍能选择不发。0为不考虑，1为每个有效候选都考虑。",
+        "type": "float",
+        "default": 0.5
+      },
+      "share_probability": {
+        "description": "所选见闻保留为私聊话头概率",
+        "hint": "候选来自已实际浏览的动态；普通聊天和既有主动消息机会按此概率考虑采用。主人明确询问有趣的事或见闻时不抽概率。",
+        "type": "float",
+        "default": 0.65
+      },
+      "vision_enabled": {
+        "description": "浏览时允许看图",
+        "hint": "详见本插件视图中的具体效果。只影响空间自主活动，不修改人格、主动提示词或AstrBot分段配置。",
+        "type": "bool",
+        "default": true
+      },
+      "vision_provider_id": {
+        "description": "看图提供商ID",
+        "hint": "留空复用表情包管理器的识图模型。看图有额外模型费用，在LivingMemory中归为“空间看图”。",
+        "type": "string",
+        "default": ""
+      },
+      "vision_images_per_read": {
+        "description": "每次最多识图张数",
+        "hint": "本次所有动态合计最多识别多少张图片或视频封面，现可设0～20。不是每条动态都有这么多图；默认1张用于节省费用。多图仍按实际用量统计，不会混淆不同动态的画面。",
+        "type": "int",
+        "default": 1
+      },
+      "observation_retention_days": {
+        "description": "原始见闻保留天数",
+        "hint": "近期外部动态原文缓存保留多久，期满可清理以节省空间。少量已进入LivingMemory的长期观察由记忆系统管理，不随这项一起删除。",
+        "type": "int",
+        "default": 30
+      },
+      "topic_ttl_hours": {
+        "description": "可选话头有效期（小时）",
+        "hint": "一个候选话题可以等待分享多久；过期就不再拿来开场。不是聊天历史或长期记忆的保存时长。",
+        "type": "int",
+        "default": 48
+      },
+      "style_guidance": {
+        "description": "社交表达偏好（不覆盖人格）",
+        "hint": "详见本插件视图中的具体效果。只影响空间自主活动，不修改人格、主动提示词或AstrBot分段配置。",
+        "type": "text",
+        "default": "沿用当前人格、关系称呼和口癖，允许傲娇、嘴硬心软、可爱吐槽和适量玩梗。结合当下语境，避免复读固定例句；可以用emoji或颜文字。认真、难过时温柔些；不把没回消息都理解为不爱或出轨，玩笑不记成事实。"
+      },
+      "mode": {
+        "description": "内部空间执行模式",
+        "type": "string",
+        "default": "autonomous",
+        "invisible": true
+      }
+    }
+  },
+  "profile_auto": {
+    "description": "QQ资料 · 主动变化",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用",
+        "type": "bool",
+        "default": true,
+        "hint": "启用本功能；全部设置也可在插件视图内按功能统一调整。"
+      },
+      "nickname": {
+        "description": "主动昵称",
+        "type": "bool",
+        "default": true,
+        "hint": "允许按人格、上下文与情绪主动变化昵称。"
+      },
+      "avatar": {
+        "description": "主动头像",
+        "type": "bool",
+        "default": true,
+        "hint": "从当前表情包分类选图，动态图片在内存提取静态帧，不另收集表情。"
+      },
+      "signature": {
+        "description": "主动签名",
+        "type": "bool",
+        "default": true,
+        "hint": "允许主动表达当前感受、愿望或日常状态；不固定套用台词。"
+      },
+      "status": {
+        "description": "主动在线状态",
+        "type": "bool",
+        "default": true,
+        "hint": "使用真实QQ在线状态，包括爱你、摸鱼中等。"
+      },
+      "probability": {
+        "description": "机会概率",
+        "type": "float",
+        "default": 0.35,
+        "hint": "0～1，仅是可用机会中进入考虑的概率，不表示每次都会执行。"
+      },
+      "daily_limit": {
+        "description": "每天自主修改最多项目数（四项合计）",
+        "type": "int",
+        "default": 2,
+        "hint": "一次改2项会用掉2个额度。每天上限为2时，设并发4也最多改剩余的2项；0暂停主动变化。"
+      },
+      "cooldown_hours": {
+        "description": "同一项资料再次变化的最短间隔（小时）",
+        "type": "int",
+        "default": 6,
+        "hint": "各项分别计算；换昵称不阻止换签名或状态。0表示不限制时间。你刚手动改过的那一项同样进入冷却。"
+      },
+      "max_changes_per_opportunity": {
+        "description": "每次最多一起改几项（1至4）",
+        "type": "int",
+        "default": 2,
+        "hint": "设置同一次资料想法的项目上限；设1就是单项。仍受今日剩余总项目数及各项冷却限制，允许少改或不改。"
+      },
+      "randomize_change_count": {
+        "description": "随机决定本次可改数量（含0项）",
+        "type": "bool",
+        "default": true,
+        "hint": "开启时在0至可用并发上限之间随机取数，0表示这次不考虑变化；关闭时直接使用所设上限，具体项目仍由人格和语境决定，不强迫凑数。"
+      }
+    }
+  },
+  "space": {
+    "description": "空间 · 来源与被动评论",
+    "type": "object",
+    "items": {
+      "owner": {
+        "description": "主人动态",
+        "type": "bool",
+        "default": true,
+        "hint": "自动浏览主人的可见动态。"
+      },
+      "friends": {
+        "description": "好友可见历史",
+        "type": "bool",
+        "default": true,
+        "hint": "轮换读取好友可见动态与历史页，不突破空间访问权限。"
+      },
+      "public": {
+        "description": "空友爱看",
+        "type": "bool",
+        "default": true,
+        "hint": "读取空友爱看推荐。"
+      },
+      "shared_comment": {
+        "description": "允许评论你分享的动态",
+        "type": "bool",
+        "default": true,
+        "hint": "你发来的动态是否允许发表评论；关闭仍会在QQ中回应你。"
+      }
+    }
+  },
+  "conversation": {
+    "description": "聊天互动 · 接话",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用",
+        "type": "bool",
+        "default": true,
+        "hint": "启用本功能；全部设置也可在插件视图内按功能统一调整。"
+      },
+      "probability": {
+        "description": "机会概率",
+        "type": "float",
+        "default": 0.6,
+        "hint": "0～1，仅是可用机会中进入考虑的概率，不表示每次都会执行。"
+      },
+      "turn_gap": {
+        "description": "接话间隔轮数",
+        "type": "int",
+        "default": 2,
+        "hint": "两次轻松接话机会至少间隔几轮，认真或收尾时避开。"
+      }
+    }
+  },
+  "meme_reaction": {
+    "description": "聊天互动 · 收表情后的俏皮回应",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用收表情互动",
+        "type": "bool",
+        "default": true,
+        "hint": "只在表情包管理器确认主人图片进入正式库后考虑接一句；待审、重复和失败不触发。优先融入当轮，较慢才补发，沿用当前人格、记忆和心情。"
+      },
+      "probability": {
+        "description": "成功收藏后互动概率",
+        "type": "float",
+        "default": 0.45,
+        "hint": "0.45表示约45%的合适机会考虑互动；不是图片收集概率，不改变原来的自动收集。"
+      },
+      "cooldown_minutes": {
+        "description": "两次收表情互动至少间隔（分钟）",
+        "type": "int",
+        "default": 10,
+        "hint": "只限制说话，不限制原插件继续收集图片。"
+      },
+      "daily_limit": {
+        "description": "每天最多互动次数",
+        "type": "int",
+        "default": 5,
+        "hint": "0暂停互动。多图消息最多接一句，当前对话已结束或有新消息则不补发旧话。"
+      }
+    }
+  }
+}

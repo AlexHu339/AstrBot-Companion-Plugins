@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>小鱼 · 记忆与费用</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header><div><p class="eyebrow">COMPANION MEMORY</p><h1>小鱼的记忆账本</h1><p class="sub">看看记住了什么、用了多少空间，以及每一笔调用花在哪里。</p></div><div class="header-actions"><button id="memory-manager">记忆管理 · 查看／置顶</button><button id="refresh">刷新数据</button></div></header>
+    <p id="error" class="error" role="alert" hidden></p>
+    <p id="initialization" class="note" role="status"></p>
+    <section class="platforms" aria-label="按平台查看费用与余额">
+      <article class="platform-card"><div class="section-head"><h2>DeepSeek</h2><span class="badge">本机用量核算</span></div>
+        <div class="platform-metrics"><div><span>今日费用</span><strong id="deepseek-today">—</strong><small id="deepseek-today-note">正在读取</small></div><div><span>本月费用</span><strong id="deepseek-month">—</strong><small id="deepseek-month-note">正在读取</small></div><div><span>平台剩余金额</span><strong id="balance">未刷新</strong><small id="balance-time">官方账户共享余额</small></div></div>
+        <button class="link" id="balance-refresh">刷新官方余额 · 不消耗聊天 token</button><p class="note">费用只计本机观测到的调用；平台余额是所用 DeepSeek 账户各 API Key 共用的余额。</p>
+      </article>
+      <article class="platform-card"><div class="section-head"><h2>MiMo</h2><span class="badge">本机用量核算</span></div>
+        <div class="platform-metrics"><div><span>今日费用</span><strong id="mimo-today">—</strong><small id="mimo-today-note">正在读取</small></div><div><span>本月费用</span><strong id="mimo-month">—</strong><small id="mimo-month-note">正在读取</small></div><div><span>剩余金额（本机估算）</span><strong id="mimo-balance">待校准</strong><small id="mimo-balance-note">尚未填入官网余额</small></div></div>
+        <a class="link" href="https://platform.xiaomimimo.com/#/console/balance" target="_blank" rel="noopener noreferrer">打开 MiMo 官方余额页</a>
+        <details class="balance-calibration"><summary>校准 MiMo 余额</summary><p class="note">暂未接入已验证的官方余额查询接口。填入官网当前余额后，仅扣除之后本机记录的新增费用；其他软件消费、充值、赠金和优惠不会自动同步。此数字不是平台实时余额，充值或对账后可重新校准。</p><form id="mimo-anchor-form"><label for="mimo-anchor">MiMo 官网当前余额（元）</label><div class="input-row"><input id="mimo-anchor" type="number" min="-10000" max="1000000" step="any" required placeholder="输入官网余额"><button id="mimo-anchor-save">保存并校准</button></div><p id="mimo-anchor-saved" class="note" role="status"></p></form></details>
+      </article>
+    </section>
+    <section id="speech-services" class="speech-services" aria-label="豆包语音试用用量与费用"></section>
+    <section class="panel"><div class="section-head"><h2>火山平台 · 共用余额与账单</h2><a class="link" href="https://console.volcengine.com/finance/account-overview" target="_blank" rel="noopener noreferrer">打开火山账户总览</a></div>
+      <div class="platform-metrics"><div><span>平台剩余金额（本机估算）</span><strong id="volc-wallet">待校准</strong><small id="volc-wallet-note"></small></div></div>
+      <p class="note">现有语音 API Key 用于生成音频；资源、到期时间和财务余额的管理 OpenAPI 使用另外的签名鉴权，目前未接入该查询权限。这里不会调用模型查余额，不消耗聊天token。校准后只扣本机新增已核算费用，不自动同步充值、优惠或其他应用消费。</p>
+      <details class="balance-calibration"><summary>校准火山共用余额</summary><form id="volc-wallet-form"><label>官网当前人民币余额<div class="input-row"><input id="volc-wallet-input" type="number" step="any" min="-10000" max="1000000" required><button id="volc-wallet-save">保存并校准</button></div></label></form></details>
+      <details class="balance-calibration"><summary>登记音色槽位、资源包等实际购买费用</summary><p class="note">这些是平台订单，生成接口不会返回订单金额，需要对照账单登记；同一笔只录入一次。充值不是费用。资源包购买记一次现金支出，之后包内用量不再重复算钱。</p><form id="speech-expense-form" class="speech-settings-form"><label>费用用途<select id="speech-expense-category"><option value="voice_slot">音色槽位购买／续费</option><option value="speech_resource_purchase">语音／唱歌资源包购买</option><option value="speech_other_fee">其他语音平台费用</option></select></label><label>实际支出（元）<input id="speech-expense-amount" type="number" min="0" max="1000000" step="any" required></label><label>支出时间（北京时间）<input id="speech-expense-at" type="datetime-local" required></label><button id="speech-expense-save">登记此笔支出</button></form></details>
+    </section>
+    <div class="billing-overview"><div>今日合计 <b id="today">—</b><small id="unknown">正在读取</small></div><div>本月合计 <b id="month">—</b><small id="month-unknown">仅含本机观测到的调用</small></div><div>今日预算剩余 <b id="remaining">未设置</b><small id="budget-hint">0 表示只统计，不限制</small></div></div>
+    <p id="other-platforms" class="note" hidden></p>
+    <section class="panel"><div class="section-head"><h2>费用去向</h2><label class="period-control">统计期间<select id="cost-period"><option value="today">今日</option><option value="month">本月</option></select></label></div><p id="period-summary" class="note"></p><div class="table-wrap"><table><thead><tr><th>用途</th><th>模型</th><th>调用／笔数</th><th>计费用量</th><th>普通输入 token</th><th>缓存输入 token</th><th>输出 token</th><th>核算费用</th></tr></thead><tbody id="costs"></tbody></table></div><p id="billing-note" class="note"></p><details><summary>统计覆盖范围与限制</summary><p id="coverage-included" class="note"></p><p id="coverage-excluded" class="note"></p><p id="started" class="note"></p></details></section>
+    <div class="columns">
+      <section class="panel"><h2>空间与记忆</h2><div id="storage"></div><p id="counts"></p><p class="note" id="resources"></p><p class="note">路径 <code id="root"></code></p><p class="note">本地嵌入 API 费用为 0；电脑电费不计入模型账单。语音、唱歌用量与费用见上方各自卡片。</p></section>
+      <section class="panel"><h2>预算与上下文</h2><form id="budget-form"><label for="budget">每日人民币预算</label><div class="input-row"><input id="budget" type="number" min="0" max="10000" step="0.01" value="0"><button>保存</button></div></form><p class="note">额度用完后暂停额外主动调用和后台提取，普通聊天继续；缺失费用会提示，不能视为零消费。</p><div id="limits"></div><p class="note">预算是每次携带的内容上限，不是硬盘可保存的记忆总量。当前人格与主动提示词沿用你的原设定。</p></section>
+    </div>
+    <section class="panel"><h2>最近的记忆选择</h2><p class="note">用于核对是否触发检索、选择了哪些记忆。这里只记录选择依据，不调用模型解释。</p><div id="traces"></div></section>
+    <section class="panel" id="consolidation-panel">
+      <div class="section-head"><h2>记忆自动整理</h2><button id="consolidation-run" type="button">现在检查</button></div>
+      <label class="toggle"><input id="consolidation-enabled" type="checkbox">每天自动检查旧记忆</label>
+      <p id="consolidation-rules" class="note"></p><p id="consolidation-state" class="note" role="status"></p>
+      <p class="note">先在本地找相近主题，再请模型确认是否适合合并。置顶、重要记忆和新近记忆受保护；人物、人格与外部资料隔离。有冲突或合并后不更精炼就保留原样。旧记录归档，原文和事件时间保留，未完成话题与目的继续关联。没有合适分组不调用整理模型；费用计入“记忆整理”。开关立即保存，其余参数可在插件配置的“记忆整合”中调整。</p>
+    </section>
+    <section class="panel" id="emotion-panel"><div class="section-head"><h2>小鱼的心情</h2><button id="emotion-refresh" type="button">刷新心情</button></div>
+      <p class="note">这里展示小鱼的八种短时情绪（含委屈），用来延续表达；与用户的事实记忆分开。当前数值会随时间自然回稳，0表示没有该情绪，&lt;0.1表示只剩很弱的余韵；不是亲密度或爱你的程度。空闲时只在本地计算，不调用模型。判断模型自评的可信度仅作筛选依据。</p>
+      <label for="emotion-namespace">私聊与人格</label><select id="emotion-namespace"></select>
+      <div class="emotion-overview"><strong id="emotion-score">70</strong><div><b id="emotion-summary">等待正常聊天</b><p id="emotion-state-note" class="note"></p></div></div>
+      <div id="emotion-bars" class="emotion-bars"></div><p id="emotion-reason" class="note"></p>
+      <form id="emotion-form" class="rhythm-controls">
+        <label class="toggle"><input id="emotion-enabled" type="checkbox">启用情绪判断</label>
+        <label class="toggle"><input id="emotion-inject_enabled" type="checkbox">让情绪影响表达</label>
+        <label>判断方式<select id="emotion-mode"><option value="low_frequency">低频判断</option><option value="per_turn">逐轮判断</option></select></label>
+        <label>低频间隔轮次<input id="emotion-interval_rounds" type="number" min="2" max="20" step="1" value="3"></label>
+        <label>低频最短间隔（秒）<input id="emotion-min_interval_seconds" type="number" min="0" max="600" step="1" value="30"></label>
+        <label>可信度门槛<input id="emotion-confidence_threshold" type="number" min="0" max="1" step="0.05" value="0.65"></label>
+        <label>心情基线<input id="emotion-baseline" type="number" min="30" max="100" value="70"></label>
+        <label>心情下限<input id="emotion-floor" type="number" min="0" max="70" value="30"></label>
+        <label>心情回稳半衰期（小时）<input id="emotion-mood_half_life_hours" type="number" min="0.25" max="24" step="0.25" value="3"></label>
+        <label>各项情绪回稳半衰期（分钟）<input id="emotion-emotion_half_life_minutes" type="number" min="10" max="1440" value="90"></label>
+        <label>判断模型提供商 ID<input id="emotion-provider_id" type="text" maxlength="200" placeholder="留空沿用现有记忆模型"></label>
+        <label>每轮情绪背景预算（tokens）<input id="emotion-context_tokens" type="number" min="40" max="200" step="10" value="120"></label>
+        <div><button id="emotion-save" type="submit">保存情绪设置</button><span id="emotion-saved" role="status" class="note"></span></div>
+      </form>
+      <p class="note">逐轮模式：每个成功回复的人类聊天轮次判断一次。低频模式：达到轮次或出现明显情绪线索时判断，遵守最短间隔。分析在回复发出后运行；主动任务复用当前心情，不把自己的话反复当成新证据。费用在上方「情绪判断」单列；情绪背景共用原有连续背景预算。</p>
+      <div class="section-head emotion-timeline-head"><h2>心情变化时间线</h2><button id="emotion-reset" type="button">重置当前心情与时间线</button></div>
+      <p class="note">最近显示 40 次判断，最多保留 100 次。重置仅清空所选私聊与人格的情绪记录，长期事实记忆和费用账本保留。</p>
+      <div id="emotion-history"></div>
+    </section>
+    <section class="panel" id="rhythm-panel"><h2>聊天节奏</h2><p id="rhythm-state" class="note" role="status"></p>
+      <form id="rhythm-form" class="rhythm-form">
+        <label class="toggle rhythm-master"><input id="rhythm-enabled" type="checkbox">启用聊天节奏</label>
+        <div class="rhythm-groups">
+          <section class="rhythm-group" aria-labelledby="rhythm-merge-title">
+            <h3 id="rhythm-merge-title">收到消息：立即处理，还是等你连着说完</h3>
+            <label class="toggle"><input id="rhythm-merge_enabled" type="checkbox" aria-controls="rhythm-wait-fields">等你说完再回</label>
+            <p id="rhythm-wait-note" class="note" role="status"></p>
+            <fieldset id="rhythm-wait-fields" class="rhythm-fields">
+              <legend>仅上方开关开启时生效</legend>
+              <label>最后一条消息后，静默多久开始回复（秒）<input id="rhythm-quiet_seconds" type="number" min="0.5" max="10" step="0.5" value="2"><small>例如 2 秒：你又发一条，就从新消息重新计时。</small></label>
+              <label>从第一条开始，累计最多等多久（秒）<input id="rhythm-max_wait_seconds" type="number" min="0.5" max="30" step="0.5" value="10"><small>例如 10 秒：连续发很多条，也不会无限等下去。</small></label>
+            </fieldset>
+          </section>
+          <section class="rhythm-group" aria-labelledby="rhythm-close-title">
+            <h3 id="rhythm-close-title">话题结束：自然收尾</h3>
+            <label class="toggle"><input id="rhythm-closure_enabled" type="checkbox" aria-controls="rhythm-close-fields">允许简短附和自然收尾</label>
+            <p class="note">闲聊结束后的“嗯”“好的”可以自然停下；明确提问正常回答，首次道别仍会接一句。</p>
+            <fieldset id="rhythm-close-fields" class="rhythm-fields"><legend>自然收尾后的等待</legend>
+              <label>收尾后暂停额外主动消息（分钟）<input id="rhythm-closure_cooldown_minutes" type="number" min="0" max="120" step="1" value="20"><small>只暂停主动搭话；你发来新话题，随时继续。</small></label>
+            </fieldset>
+          </section>
+          <section class="rhythm-group"><h3>主动搭话与回复表达</h3>
+            <label class="toggle"><input id="rhythm-proactive_pause_enabled" type="checkbox">主动消息遵守收尾冷却与忙碌状态</label><p class="note">正在聊天或刚刚收尾时，减少主动消息插进来；主动消息的原提示词保持不变。</p>
+            <label class="toggle"><input id="rhythm-format_hint_enabled" type="checkbox">按完整意思组织短句</label><p class="note">提醒模型把话说完整，不把一个意思拆成很多碎句；不会更改 AstrBot 的分段间隔。</p>
+          </section>
+          <section class="rhythm-group rhythm-delivery"><h3>回复交付：文字优先</h3>
+            <p>文字生成后直接交付，MiMo 在后台选好表情后补发；新问题到来后，旧话题的迟到表情会跳过。</p>
+            <p>下一轮可在上一轮发送时提前生成。你发来新的实质内容时，先在安全边界停止旧轮未发出的碎句；新回复一旦就绪就接上，已发文字保留，其余短句不合并、不回头补发。正在发送到 QQ 的一条会等回执，避免误取消或重复发送。</p>
+            <p class="note">沿用你原来的分段间隔和 MiMo 模型。回戳按原有权限、概率规则和动作冷却独立处理，不等待整轮文字发完。</p>
+          </section>
+        </div>
+        <div class="rhythm-save"><button type="submit">保存聊天节奏</button><span id="rhythm-saved" role="status" class="note"></span></div>
+      </form>
+      <p class="note">修改后点击“保存聊天节奏”生效。仅合并白名单 QQ 私聊的纯文字；图片、语音、引用和命令保留原处理流程。人格、主动提示词、分段设置均沿用原值；本模块不增加分析模型调用。</p>
+    </section>
+    <footer>基于 LivingMemory 2.8.2 的陪伴定制版 · 核算金额为参考，最终以服务商账单为准。</footer>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

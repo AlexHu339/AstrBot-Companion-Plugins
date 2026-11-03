@@ -1,0 +1,18 @@
+{
+  "api_key": "",
+  "voice_type": "",
+  "speed_ratio": 0,
+  "loudness_rate": 0,
+  "sample_rate": 24000,
+  "tts_probability": 80,
+  "max_length": 50,
+  "min_length": 5,
+  "blocked_words": [],
+  "enable_tts": true,
+  "enable_llm_tool": true,
+  "enable_tts_tool_minmax": true,
+  "enable_llm_response": false,
+  "llm_recognition": "",
+  "explicit_min_length": 1,
+  "explicit_max_length": 1000
+}

@@ -1,0 +1,161 @@
+# 🎙️ 克隆语音 — AstrBot CloneTTS 插件
+
+<p align="center">
+  基于 <strong>火山引擎音色克隆 (ICL)</strong> 的 AstrBot 文本转语音插件，使用自定义克隆音色让你的聊天机器人开口"说话"。
+</p>
+
+<p align="center">
+  <a href="https://github.com/Radiant303/astrbot_plugin_clonetts"><img src="https://img.shields.io/badge/version-v3.0.1-blue" alt="version" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-green" alt="license" /></a>
+  <a href="https://docs.astrbot.app/dev/star/plugin-new.html"><img src="https://img.shields.io/badge/docs-AstrBot-orange" alt="docs" /></a>
+</p>
+<p align="center">
+  <img src="https://count.getloli.com/@astrbotpluginclonetts?name=astrbotpluginclonetts&theme=miku&padding=7&offset=0&align=center&scale=0.3&pixelated=1&darkmode=auto" alt="visitor count" />
+</p>
+
+---
+
+## 如果你觉得教程太繁琐或者有问题 可以提交issu或者联系我提供技术支持
+
+#### qq群 1047673114 (申请时备注插件名😊,记得点star!)
+
+## 本插件不依赖AstrBot的TTS功能,所以你不需要额外配置AstrBot的tts,只需要按照以下教程获取火山引擎的凭证并配置到插件里就可以了
+
+## 📋 前置要求
+
+1. **AstrBot** ≥ v4.5.0 已安装并正常运行
+2. **火山引擎账号**，并开通 [语音合成服务](https://console.volcengine.com/speech/new/overview?projectName=default)
+3. 在火山引擎控制台创建 **音色克隆** 音色，获取以下凭证：
+   - `api_key` — API Key（[控制台 > API Key管理](https://console.volcengine.com/speech/new/setting/apikeys?projectName=default) 获取）
+   - `voice_type` — 克隆音色 ID (Speaker ID)
+
+## 📖 凭证获取教程
+
+### 第一步：开通服务
+
+1. 打开 [火山引擎语音控制台](https://console.volcengine.com/speech/new/overview?projectName=default)，登录并完成实名认证
+2. 在控制台开通 **语音合成大模型** 与 **声音复刻大模型** 服务
+
+![开通服务](https://free.picui.cn/free/2026/03/11/69b0f7fc9339c.png)
+
+### 第二步：创建克隆音色（获取 `voice_type`）
+
+1. 进入 [控制台 > 音色库](https://console.volcengine.com/speech/new/voices?projectName=default)
+2. 点击 **声音复刻**，上传一段清晰的人声音频进行克隆（建议单人、无背景噪声）
+3. 请注意选择"我要复刻中文音色"，其他语种火山引擎 V3 接口暂不支持（实际声音效果相同，需要复刻其他语种的音色也可以选择这个选项）
+
+![声音复刻](https://free.picui.cn/free/2026/03/11/69b0f7fcce286.png)
+
+4. 训练完成后，在音色库中复制该音色的 **音色 ID**，填入配置中的 `voice_type`（复刻音色通常以 `S_` 开头）
+
+![音色ID](https://free.picui.cn/free/2026/08/20/6a86f26e47867.png)
+
+### 第三步：获取 API Key（获取 `api_key`）
+
+1. 进入 [控制台 > API Key管理](https://console.volcengine.com/speech/new/setting/apikeys?projectName=default)
+2. 点击 **创建 API Key**，复制生成的 Key 填入配置中的 `api_key`
+
+![API Key](https://free.picui.cn/free/2026/08/20/6a86f2ac43aa0.png)
+
+---
+
+## ⚙️ 配置说明
+
+安装后在 AstrBot 管理面板的 **插件配置** 中找到 `克隆语音`，填写以下参数：
+
+| 参数                     | 类型     | 默认值  | 说明                                                                 |
+| ------------------------ | -------- | ------- | -------------------------------------------------------------------- |
+| `enable_tts`             | `bool`   | `true`  | 全局 TTS 开关，关闭后不进行任何语音合成                               |
+| `api_key`                | `string` | `""`    | 火山引擎 API Key（控制台 > API Key管理 获取）**（必填）**             |
+| `voice_type`             | `string` | `""`    | 克隆音色 ID（Speaker ID）**（必填）**                               |
+| `speed_ratio`            | `int`    | `0`     | 语速，范围 `-50` ~ `100`（`0`=正常，`100`=2 倍，`-50`=0.5 倍）       |
+| `loudness_rate`          | `int`    | `0`     | 音量，范围 `-50` ~ `100`（`0`=正常，`100`=2 倍，`-50`=0.5 倍）       |
+| `sample_rate`            | `int`    | `24000` | 采样率，可选：`8000`/`16000`/`22050`/`24000`/`32000`/`44100`/`48000` |
+| `tts_probability`        | `int`    | `80`    | 被动模式触发概率（`0`~`100`，超范围会自动截断）                       |
+| `max_length`             | `int`    | `50`    | 文本长度上限（被动模式始终生效；工具模式由 `enable_tts_tool_minmax` 控制） |
+| `min_length`             | `int`    | `5`     | 文本长度下限（被动模式始终生效；工具模式由 `enable_tts_tool_minmax` 控制） |
+| `blocked_words`          | `list`   | `[]`    | 屏蔽词列表，文本包含任一屏蔽词时跳过 TTS                              |
+| `enable_llm_tool`        | `bool`   | `true`  | 是否启用 `clone_tts` 工具，允许 AI 主动调用语音合成                   |
+| `enable_tts_tool_minmax` | `bool`   | `true`  | 工具模式下是否也应用 `min_length` / `max_length` 字数限制             |
+| `enable_llm_response` | `bool`   | `false` | ![1773150294051.png](https://free.picui.cn/free/2026/03/11/69b0f7fc468c3.png) |
+| `llm_recognition`        | `string` | `""`    | 语气识别模型 Provider ID，留空时使用当前会话的默认模型                |
+
+---
+
+## 📖 使用方式
+
+### 1. 被动模式（自动转换）
+
+插件会根据 `tts_probability` 的概率自动将 LLM 的文字回复转换为语音。如果回复字数不在 `min_length` 到 `max_length` 之间，则跳过转换。
+
+### 2. 工具模式（AI 主动触发）
+
+当 `enable_llm_tool` 开启时，AI 可以在对话中意识到自己具有 `clone_tts` 工具。它会根据语境主动决定是否使用语音回复。
+
+---
+
+## ✨ 功能特性
+
+| 特性            | 说明                                               |
+| --------------- | -------------------------------------------------- |
+| 🗣️ 音色克隆     | 接入火山引擎音色克隆 (ICL) v3 API，音质逼真        |
+| 🛠️ LLM 工具支持 | 允许 LLM 主动调用 `clone_tts` 工具进行语音回复     |
+| 🎛️ 音频参数可调 | 支持调节语速、音量、采样率                         |
+| 🎲 概率触发     | 可配置 0–100% 的被动回复概率，灵活控制语音频率     |
+| 📝 屏蔽词列表   | 配置 `blocked_words` 可以屏蔽指定文本              |
+| 📏 长度限制     | 被动模式下可设置字数上下限，避免长文本或短语转语音 |
+| ⚡ 流式合成     | 使用 HTTP Chunked 流式接口获取音频，响应更迅速      |
+| 🛡️ 防御性设计   | 完善的配置校验、异常捕获与日志，运行稳定           |
+
+---
+
+## 🏗️ 项目结构
+
+```
+astrbot_plugin_clonetts/
+├── main.py              # 插件主逻辑与工具定义
+├── tts_api/
+│   └── dy_tts_api.py    # 封装火山引擎 HTTP Chunked 接口
+├── metadata.yaml        # 插件元信息
+├── _conf_schema.json    # 配置项定义
+├── README.md            # 本文档
+└── requirements.txt     # 依赖 (aiohttp)
+```
+
+---
+
+## 🔧 常见问题排查
+
+### 插件已启用但没有语音回复
+
+1. 确认 `api_key`、`voice_type` 已正确配置。
+2. 检查 `tts_probability` 是否过低，或回复字数超出了限制。
+3. 查看 AstrBot 运行日志，寻找以 `CloneTTS` 开头的错误提示。
+
+### 语音合成失败
+
+- 确认火山引擎账号欠费或服务已过期。
+- 确认网络能访问 `openspeech.bytedance.com`。
+- 如果使用的是旧版音色，请确认其支持 `seed-icl-2.0`（本插件使用此 Resource ID）。
+
+---
+
+## 🔗 相关链接
+
+- 📘 [AstrBot 插件开发文档](https://docs.astrbot.app/dev/star/plugin-new.html)
+- 🌋 [火山引擎音色克隆 ICL](https://www.volcengine.com/product/tts)
+- 🐙 [本插件 GitHub 仓库](https://github.com/Radiant303/astrbot_plugin_clonetts)
+
+---
+
+
+## ⭐ Star History
+
+> [!TIP]
+> 如果本项目对您的生活 / 工作产生了帮助，或者您关注本项目的未来发展，请给项目 Star，这是我们维护这个开源项目的动力 <3
+
+<div align="center">
+
+[![Star History Chart](https://api.star-history.com/image?repos=Radiant303/astrbot_plugin_clonetts&type=date&legend=top-left)](https://www.star-history.com/?repos=Radiant303%2Fastrbot_plugin_clonetts&type=date&legend=top-left)
+
+</div>

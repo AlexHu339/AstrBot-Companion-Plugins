@@ -1,0 +1,20 @@
+{
+  "variant": "companion.14",
+  "version": "2.8.2+companion.14",
+  "upstream": "https://github.com/lxfight-s-Astrbot-Plugins/astrbot_plugin_livingmemory",
+  "upstream_tag": "2.8.2",
+  "license": "AGPL-3.0",
+  "built_for": "AstrBot 4.29.3",
+  "independent_continuous_thinking": false,
+  "initial_daily_budget": "accounting_only",
+  "chat_rhythm": true,
+  "scoped_pinned_memories": true,
+  "seven_emotions": true,
+  "emotion_dimensions": 8,
+  "integration_1_11": true,
+  "safe_memory_consolidation": true,
+  "background_text_delivery": true,
+  "preserve_reply_segments": true,
+  "interrupt_ready_reply": true,
+  "delivery_backed_memory": true
+}

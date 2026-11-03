@@ -1,0 +1,13 @@
+{
+  "song_seconds": 25,
+  "playful_feedback": true,
+  "reuse_clonetts": true,
+  "reuse_clonetts_voice": true,
+  "doubao_api_key": "",
+  "allow_autonomous_singing": false,
+  "backend": "doubao",
+  "doubao_app_id": "",
+  "doubao_access_token": "",
+  "doubao_tries": 1,
+  "server_url": "http://127.0.0.1:18620"
+}

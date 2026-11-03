@@ -1,0 +1,8 @@
+name: astrbot_plugin_qq_features
+display_name: qq功能拓展
+author: local companion customization
+version: 2.3.2
+desc: QQ互动、资料、心情签名与自主空间生活；随机浏览发评、有来源的见闻记忆，适配现有人格与主动消息。
+support_platforms: [aiocqhttp]
+astrbot_version: ">=4.29.0,<5.0.0"
+repo: ""

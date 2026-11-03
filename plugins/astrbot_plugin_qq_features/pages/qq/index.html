@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>qq功能拓展</title><link rel="stylesheet" href="style.css"></head>
+<body><main id="workspace">
+<header><div><span class="version">qq功能拓展 · 2.2</span><h1>小鱼的互动与生活</h1><p>按功能管理权限，参数就在旁边。你要求的事和小鱼自己的想法分开设置。</p></div><div class="header-actions"><button id="refresh" class="secondary">刷新状态</button><button id="save-all">保存全部设置</button></div></header>
+<p id="error" role="alert" hidden></p>
+<div class="save-bar"><div><strong id="save-state" role="status">正在读取配置…</strong><span id="save-note">改动后统一保存；刷新不会抹掉尚未保存的输入。</span></div><div id="master-control"></div></div>
+<div id="integration" class="badges"></div>
+<nav id="navigation" aria-label="功能分类"><button data-tab="chat" class="selected">聊天互动</button><button data-tab="profile">QQ资料</button><button data-tab="space">空间与见闻</button><button data-tab="records">记录与用量</button></nav>
+<section id="group-chat" class="tab-panel"><div class="section-title"><div><h2>聊天互动</h2><p>每一种互动独立开关，频率和有效时长就放在它下面。</p></div></div><div id="chat-content" class="cards"></div></section>
+<section id="group-profile" class="tab-panel" hidden><div class="section-title"><div><h2>QQ资料</h2><p>同一种资料放在一个框里：“听你要求”和“由小鱼主动”互不代替。</p></div></div><div id="profile-policy"></div><div id="profile-content" class="cards"></div><details class="card timing"><summary>没等到回复／聊天结束后，什么时候考虑变化</summary><p class="note">这些等待只产生一次“资料或说说”的候选；一次资料想法可在并发上限内选择多项，不会另发私聊。与空间发表共用的时间在两处同步显示。</p><div id="profile-timing" class="fields"></div></details></section>
+<section id="group-space" class="tab-panel" hidden><div class="section-title"><div><h2>空间与见闻</h2><p>你发来的动态、主动浏览、公开评论、发说说、把感受带回聊天，沿着同一条流程协作。</p></div></div><div id="space-content"></div></section>
+<section id="group-records" class="tab-panel" hidden><div class="section-title"><div><h2>记录与用量</h2><p>只展示真实见闻与执行结果。没有发布成功的操作不会写成“已发布”。</p></div></div><div id="social-stats" class="badges"></div><div class="card"><h3>模型用量如何统计</h3><p id="cost-note"></p><p class="note">完整 token 和费用明细沿用左侧 LivingMemory 的记忆账本；这里不另记一份账。QQ接口操作和本地计时检查本身不消耗聊天 token。</p></div><div class="cards"><div class="card"><h3>最近见闻</h3><div id="observations"></div></div><div class="card"><h3>等待自然聊起的话题</h3><div id="topics"></div><h3>接下来的机会</h3><div id="jobs"></div></div></div><div class="card"><h3>最近真实动作</h3><div id="receipts"></div></div><details class="card"><summary>连接检测与高级选项</summary><p id="social-source" class="note"></p><div id="advanced-fields" class="fields"></div><button id="public-source-check" class="secondary">只读检测空友爱看</button><p id="check-result" role="status"></p><p class="note">检测不会调用聊天模型，也不发布或评论。长期记忆仍在 LivingMemory 中维护。</p></details></section>
+<footer><span id="footer-state">所有功能共用当前人格、上下文、记忆和已有主动消息。</span><button id="save-bottom">保存全部设置</button></footer>
+</main><script type="module" src="app.js"></script></body></html>

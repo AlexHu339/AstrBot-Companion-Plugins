@@ -1,0 +1,178 @@
+{
+  "bot_language": "zh",
+  "access_control": {
+    "whitelist_enabled": false,
+    "allowed_ids": "",
+    "identity_aliases": ""
+  },
+  "provider_settings": {
+    "embedding_provider_id": "",
+    "llm_provider_id": "",
+    "llm_stream_mode": "auto"
+  },
+  "session_manager": {
+    "enable_full_group_capture": true,
+    "max_sessions": 100,
+    "session_ttl": 3600,
+    "context_window_size": 50,
+    "max_messages_per_session": 1000,
+    "cleanup_batch_size": 50
+  },
+  "recall_engine": {
+    "top_k": 5,
+    "max_k": 10,
+    "importance_weight": 1.0,
+    "min_importance_for_retrieval": 0.0,
+    "min_similarity_for_retrieval": 0.0,
+    "recent_memory_count": 2,
+    "recent_memory_max_age_hours": 72,
+    "memory_type_filter": "all",
+    "fallback_to_vector": true,
+    "rerank_enabled": false,
+    "rerank_provider_id": "",
+    "rerank_candidates": 20,
+    "fusion_mode": "score",
+    "fusion_bm25_weight": 0.5,
+    "fusion_agreement_bonus": 0.25,
+    "recall_candidate_multiplier": 3,
+    "injection_method": "extra_user_content",
+    "auto_remove_injected": true,
+    "inject_with_recent_context": false,
+    "recent_context_max_age_seconds": 7200,
+    "search_cache_enabled": true,
+    "search_cache_ttl_seconds": 45.0,
+    "search_cache_max_size": 256
+  },
+  "importance_decay": {
+    "decay_rate": 0.01,
+    "access_decay_window_days": 30.0,
+    "access_decay_max_count": 10,
+    "access_count_decay_multiplier": 0.5,
+    "protected_importance_threshold": 1.0
+  },
+  "fusion_strategy": {
+    "rrf_k": 60
+  },
+  "filtering_settings": {
+    "use_persona_filtering": true,
+    "use_session_filtering": true,
+    "memory_scope_mode": "legacy",
+    "isolated_sessions": ""
+  },
+  "reflection_engine": {
+    "summary_trigger_rounds": 10,
+    "max_segments_per_run": 10,
+    "window_split_by_day": true,
+    "window_split_gap_minutes": 180,
+    "include_source_time_tags": true,
+    "source_retention_importance_threshold": 0.8
+  },
+  "agent_tools": {
+    "enable_recall_tool": true,
+    "enable_agentic_recall_beta": false,
+    "enable_memorize_tool": false,
+    "enable_forget_tool": false,
+    "forget_tool_max_memories": 3,
+    "forget_tool_cooldown_seconds": 60,
+    "agentic_recall_max_calls": 4,
+    "agentic_recall_time_budget_seconds": 20,
+    "agentic_recall_max_result_chars": 12000
+  },
+  "graph_memory": {
+    "enabled": true,
+    "document_route_weight": 0.65,
+    "graph_route_weight": 0.35,
+    "cross_route_bonus": 0.08,
+    "expansion_limit": 24,
+    "expansion_hops": 1,
+    "second_hop_weight": 0.4,
+    "dynamic_route_weighting": true,
+    "max_topics_per_memory": 6,
+    "max_participants_per_memory": 8,
+    "max_facts_per_memory": 8,
+    "atom_enabled": true,
+    "atom_maintenance_interval_hours": 24.0,
+    "atom_forget_delay_days": 7.0,
+    "atom_purge_delay_days": 30.0
+  },
+  "migration_settings": {
+    "auto_migrate": true,
+    "create_backup": true
+  },
+  "index_rebuild_settings": {
+    "batch_size": 50,
+    "embedding_batch_size": 8,
+    "tasks_limit": 1,
+    "max_retries": 5,
+    "retry_base_delay": 30.0,
+    "batch_delay": 5.0,
+    "request_delay": 5.0,
+    "max_failure_ratio": 0.02
+  },
+  "backup_settings": {
+    "enabled": true,
+    "keep_days": 7
+  },
+  "forgetting_agent": {
+    "auto_cleanup_enabled": true,
+    "auto_archived_enabled": false,
+    "cleanup_days_threshold": 30,
+    "cleanup_importance_threshold": 0.3
+  },
+  "memory_dedup": {
+    "enabled": true,
+    "similarity_threshold": 0.92,
+    "max_candidates": 3,
+    "merge_sources": true,
+    "max_source_messages": 50
+  },
+  "memory_consolidation": {
+    "enabled": false,
+    "trigger": "daily",
+    "granularity": "session",
+    "keep_original": "archive",
+    "min_memories_per_group": 3,
+    "min_age_days": 7,
+    "max_importance": 0.5,
+    "max_groups_per_run": 5,
+    "semantic_similarity_threshold": 0.7,
+    "candidate_limit": 200,
+    "max_group_size": 8
+  },
+  "companion": {
+    "enabled": true,
+    "data_root": "",
+    "owner_id": "",
+    "history_tokens": 3000,
+    "history_rounds": 12,
+    "facts_tokens": 240,
+    "continuity_tokens": 240,
+    "purpose_tokens": 160,
+    "continuity_total_tokens": 640,
+    "recall_tokens": 960
+  },
+  "chat_rhythm": {
+    "enabled": true,
+    "merge_enabled": true,
+    "quiet_seconds": 3.0,
+    "max_wait_seconds": 10.0,
+    "closure_enabled": true,
+    "closure_cooldown_minutes": 20.0,
+    "proactive_pause_enabled": true,
+    "format_hint_enabled": true
+  },
+  "emotion": {
+    "enabled": true,
+    "mode": "low_frequency",
+    "interval_rounds": 3,
+    "min_interval_seconds": 30,
+    "inject_enabled": true,
+    "confidence_threshold": 0.65,
+    "baseline": 70,
+    "floor": 30,
+    "mood_half_life_hours": 3,
+    "emotion_half_life_minutes": 90,
+    "provider_id": "",
+    "context_tokens": 120
+  }
+}

@@ -1,0 +1,8 @@
+name: astrbot_plugin_dafeiyu_sing
+display_name: 小鱼唱歌
+desc: 结合当前人格和话题演唱更多歌名、原创短歌或即兴小调；云端Seed Audio，复用现有克隆语音凭证和音色
+help: 跟它说「给我唱首歌」「唱个生日歌」
+version: v0.2.1+companion.4
+author: zexuan604
+support_platforms:
+  - aiocqhttp

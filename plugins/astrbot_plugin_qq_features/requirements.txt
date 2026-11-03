@@ -1,0 +1,5 @@
+aiohttp>=3.9
+beautifulsoup4>=4.12
+json5>=0.9
+pydantic>=2,<3
+Pillow>=10

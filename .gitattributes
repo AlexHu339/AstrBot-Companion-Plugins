@@ -1,0 +1,2 @@
+# Preserve identical source bytes between Git and the release ZIPs.
+* -text

@@ -1,0 +1,92 @@
+{
+  "api_key": {
+    "type": "string",
+    "description": "火山引擎 API Key（控制台 > API Key管理 获取）",
+    "default": ""
+  },
+  "voice_type": {
+    "type": "string",
+    "description": "音色 ID（在火山引擎控制台获取）",
+    "default": ""
+  },
+  "speed_ratio": {
+    "type": "int",
+    "description": "语速，取值范围[-50,100]，100代表2.0倍速，-50代表0.5倍数",
+    "default": 0
+  },
+  "loudness_rate": {
+    "type": "int",
+    "description": "音量，取值范围[-50,100]，100代表2.0倍音量，-50代表0.5倍音量",
+    "default": 0
+  },
+  "sample_rate": {
+    "type": "int",
+    "description": "音频采样率",
+    "options": [
+      8000,
+      16000,
+      22050,
+      24000,
+      32000,
+      44100,
+      48000
+    ],
+    "default": 24000
+  },
+  "tts_probability": {
+    "type": "int",
+    "description": "普通与主动消息共用的自动语音概率（0～100）；主动消息另需允许TTS，点名语音不受此概率限制",
+    "default": 80
+  },
+  "max_length": {
+    "type": "int",
+    "description": "自动转语音的最大字数；超过后保留文字，不限制点名语音",
+    "default": 50
+  },
+  "min_length": {
+    "type": "int",
+    "description": "自动转语音的最小字数；不限制点名语音",
+    "default": 5
+  },
+  "blocked_words": {
+    "type": "list",
+    "description": "屏蔽词列表,包含这些词的回复将不使用 TTS",
+    "default": []
+  },
+  "enable_tts": {
+    "type": "bool",
+    "description": "启用该插件",
+    "default": true
+  },
+  "enable_llm_tool": {
+    "type": "bool",
+    "description": "启用 LLM 工具",
+    "default": true
+  },
+  "enable_tts_tool_minmax": {
+    "type": "bool",
+    "description": "点名语音使用下面独立的字数限制；与自动语音5～50字规则分开",
+    "default": true
+  },
+  "enable_llm_response": {
+    "type": "bool",
+    "description": "是否允许LLM发送语音后继续回复",
+    "default": false
+  },
+  "llm_recognition": {
+    "description": "用于识别输出语气模型（留空则使用当前会话默认模型）",
+    "type": "string",
+    "default": "",
+    "_special": "select_provider"
+  },
+  "explicit_min_length": {
+    "type": "int",
+    "description": "点名语音最小字数，默认1，允许短句",
+    "default": 1
+  },
+  "explicit_max_length": {
+    "type": "int",
+    "description": "点名语音最大字数，默认1000；超限说明原因，不截断原文",
+    "default": 1000
+  }
+}

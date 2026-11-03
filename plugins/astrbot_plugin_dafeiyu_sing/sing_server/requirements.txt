@@ -1,0 +1,10 @@
+numpy<2
+scipy
+librosa
+soundfile
+omegaconf
+transformers==4.41.2
+accelerate
+tqdm
+pypinyin
+praat-parselmouth
