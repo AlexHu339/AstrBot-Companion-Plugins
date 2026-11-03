@@ -8,4 +8,4 @@
 
 分享包不带凭据、音色授权、参考录音、生成音频或试用额度。本地 SoulX 后端为可选项，使用时自行准备有使用权的参考录音和对应标注。
 
-安装与 Provider 配置见 [合集安装说明](../../docs/INSTALL.md)。
+安装与 Provider 配置见 [合集安装说明](https://github.com/AlexHu339/AstrBot-Companion-Plugins/blob/main/docs/INSTALL.md)。

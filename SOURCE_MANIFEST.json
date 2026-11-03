@@ -153,13 +153,13 @@
     },
     {
       "path": "plugins/astrbot_plugin_dafeiyu_sing/README.md",
-      "bytes": 1074,
-      "sha256": "2397e192080c5f9327ea7887fab93b1ecb1c352bf5beac714a4cd019b5c8dece"
+      "bytes": 1133,
+      "sha256": "4267f12cd8f385ddfef7c2bbbceca9d4652a50735e73ff6effce7b821e5d637f"
     },
     {
       "path": "plugins/astrbot_plugin_dafeiyu_sing/README_COMPANION.md",
-      "bytes": 168,
-      "sha256": "99ca1d2b6c84d0f2d31431f12e0a0515199a64e14529635cd20434f8b3c54e4b"
+      "bytes": 227,
+      "sha256": "6f4b06dcde7ebe7768e99db3ec04e1e706dd0685b56eae5d4fe7905a00180721"
     },
     {
       "path": "plugins/astrbot_plugin_dafeiyu_sing/README_UPSTREAM.md",
@@ -1118,8 +1118,8 @@
     },
     {
       "path": "plugins/astrbot_plugin_livingmemory/README_COMPANION.md",
-      "bytes": 1384,
-      "sha256": "24e56af83a9e80d292fd7bdda335ada953f4249c78bca10ac0b3fdcce5b34221"
+      "bytes": 1502,
+      "sha256": "b674483a6957a0d2c6d26d55a4aadcfdbc14ffed99df52b6d6318ac403f138e1"
     },
     {
       "path": "plugins/astrbot_plugin_livingmemory/requirements.txt",

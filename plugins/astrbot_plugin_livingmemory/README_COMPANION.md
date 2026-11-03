@@ -9,4 +9,4 @@
 - 新消息到来时，旧轮未发送的碎句可停止，新回答就绪后接话；不会把未发草稿当成已经说过的事实。不更改你已有的人格、主动提示词和分段间隔。
 - 费用观察包括已适配的聊天模型、语音和唱歌；仅按本机观察到的请求与配置价格核算，缺少用量或价格会提示待核对，不能代替平台账单。
 
-本仓库不包含维护者的聊天、记忆、人格、API Key 或真实账号设置。详见 [安装说明](../../docs/INSTALL.md) 和 [本地定制说明](../../docs/LOCAL_CHANGES.md)。
+本仓库不包含维护者的聊天、记忆、人格、API Key 或真实账号设置。详见 [安装说明](https://github.com/AlexHu339/AstrBot-Companion-Plugins/blob/main/docs/INSTALL.md) 和 [本地定制说明](https://github.com/AlexHu339/AstrBot-Companion-Plugins/blob/main/docs/LOCAL_CHANGES.md)。
